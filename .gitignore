@@ -1,0 +1,8 @@
+
+*.bin
+*.o
+Cam/IOT-Cam/.pio/build/esp32cam/.sconsign37.dblite
+Cam/IOT-Cam/.pio/build/esp32cam/firmware.elf
+*.a
+*.checksum
+*.json
