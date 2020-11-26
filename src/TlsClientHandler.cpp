@@ -1,5 +1,5 @@
 #include "TlsClientHandler.h"
-#define KEY "*******************"
+#define KEY "***"
 
 TlsClientHandler::TlsClientHandler(/* args */)
 {
@@ -17,17 +17,19 @@ void TlsClientHandler::setup() {
 }
 
 
-char *TlsClientHandler::Detect() {
+char *TlsClientHandler::Detect(uint8_t * img, uint32_t length) {
 
-    http.setPath("/face/v1.0/detect?returnFaceId=true");
+    http.setPath("/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&recognitionModel=recognition_03&returnRecognitionModel=false&detectionModel=detection_02");
     http.setHost("iot-facial-compare-test.cognitiveservices.azure.com");
     http.setKey(KEY);
     http.setContent(http.HTTP_OCTET);
-    http.setContentLength(0); //set to the right size
-            // setup Root CA pem. have to be done before every connect! 
+    Serial.println(length);
+    http.setBody(img);
+    http.setContentLength(length); //set to the right size
+            // setup Root CA pem. have to be done before every connect!
     client.init(letencryptCaPem, sizeof(letencryptCaPem));
     //connect to client on dis, port
-    Serial.println(http.makeVerify());
+    Serial.println(http.makeDetect());
     client.connect(this->URL, 443);
 
     // check server certificate. if verify failed, TLS connection is alive.
@@ -36,8 +38,10 @@ char *TlsClientHandler::Detect() {
     }
 
     // Send header to azure.
-    int len = sprintf((char *)buff, http.makeVerify());
+    int len = sprintf((char *)buff, http.makeDetect());
     client.write(buff, len );
+
+    client.write(img,length);
 
     // GET HTTPS response.
     memset(buff, 0, sizeof(buff));
@@ -62,8 +66,8 @@ char * TlsClientHandler::Verify() {
     http.setHost("iot-facial-compare-test.cognitiveservices.azure.com");
     http.setKey(KEY);
     http.setContent(http.HTTP_JSON);
-    http.setBody("c5c24a82-6845-4031-9d5d-978df9175426","815df99c-598f-4926-930a-a734b3fd651c","sample_group");
-            // setup Root CA pem. have to be done before every connect! 
+    http.setBody("c0e34e38-b3ce-4678-b4ae-b89f6071afa4","bb55d87d-9898-438f-b4bb-2259fc30c6be","1");
+            // setup Root CA pem. have to be done before every connect!
     client.init(letencryptCaPem, sizeof(letencryptCaPem));
     //connect to client on dis, port
     Serial.println(http.getHost());
@@ -78,7 +82,7 @@ char * TlsClientHandler::Verify() {
     // Send header to azure.
     int len = sprintf((char *)buff, http.makeVerify());
     client.write(buff, len );
-    //make loop that 
+    //make loop that
 
     // GET HTTPS response.
     memset(buff, 0, sizeof(buff));

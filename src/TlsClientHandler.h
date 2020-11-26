@@ -50,7 +50,7 @@ public:
     TlsClientHandler(/* args */);
     ~TlsClientHandler();
     void setup();
-    char * Detect();
+    char * Detect(uint8_t * img, uint32_t length);
     char * Verify();
 };
 

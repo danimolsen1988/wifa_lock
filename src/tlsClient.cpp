@@ -3,7 +3,7 @@
 /******************************************************/
 
 #include "Particle.h"
-#line 1 "c:/Users/Keld/Documents/engineer/IoT/tlsClient/src/tlsClient.ino"
+#line 1 "c:/Users/Keld/Documents/engineer/IoT/tlsClient-argon/src/tlsClient.ino"
 /*
  * Project tlsClient
  * Description:
@@ -12,21 +12,60 @@
  */
 
 #include "TlsClientHandler.h"
+#include <vector>
 
 void setup();
 void loop();
-#line 10 "c:/Users/Keld/Documents/engineer/IoT/tlsClient/src/tlsClient.ino"
+#line 11 "c:/Users/Keld/Documents/engineer/IoT/tlsClient-argon/src/tlsClient.ino"
 TlsClientHandler client;
+TCPServer server = TCPServer(2555);
+TCPClient tcpClient;
+uint8_t * img;
+uint32_t totalSize = 0;
+uint32_t buffersize = 0;
+std::vector<uint8_t> imgVector;
+
+bool camLoop();
 
 void setup() {
+    delay(2000);
     Serial.begin(9600);
-    Serial.print(Time.timeStr());
+    Serial.println(Time.timeStr());
+    Serial.println(WiFi.localIP().toString());
     client.setup();
+    server.begin();
 }
 
 void loop() {
     // connect HTTPS server.
-    client.Detect();
-    delay(30000);
+    /*
+    if(camLoop()){
+        Serial.println(imgVector.size());   // DEBUG
+        client.Detect(&imgVector[0],imgVector.size());       
+    }*/
+    client.Verify();
+    delay(60000);
 
+
+}
+
+bool camLoop() {
+    buffersize = 0; 
+    totalSize = 0;
+    std::vector<uint8_t>().swap(imgVector);
+    tcpClient = server.available();
+    if(tcpClient) {
+       Serial.println("client connected!");
+       while(tcpClient.connected()) {
+           if((buffersize = tcpClient.available())) {
+                img = new uint8_t[buffersize];
+                tcpClient.readBytes((char*)img,buffersize);
+                imgVector.insert(imgVector.end(), img, img + buffersize);    
+                totalSize += buffersize;
+           }
+       }
+        free(img);            
+        return true;
+   }
+   return false;
 }

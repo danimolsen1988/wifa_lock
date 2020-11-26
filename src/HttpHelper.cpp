@@ -25,7 +25,13 @@ void HttpHelper::setBody(String faceId, String personId, String personGroupId) {
     httpRequest.body = tmp;
 
 }
-void HttpHelper::setContentLength(int length) {
+
+void HttpHelper::setBody(uint8_t * body) {
+   httpRequest.octetBody = body;
+}
+
+
+void HttpHelper::setContentLength(uint32_t length) {
     httpRequest.length = String(length);
 }
 
@@ -51,7 +57,7 @@ const char * HttpHelper::getHost() {
 }
 
 const char * HttpHelper::makeDetect() {
-    String tmp;
+    return  this->makeHeader().c_str();
 }
 
 const char * HttpHelper::makeVerify() {
@@ -61,7 +67,7 @@ const char * HttpHelper::makeVerify() {
 }
 
 String HttpHelper::getBodyLength() {
-    return String(httpRequest.body.length());  
+        return String(httpRequest.body.length());  
 }
 
 String HttpHelper::makeHeader() {
@@ -82,10 +88,14 @@ String HttpHelper::makeHeader() {
     tmp.concat("\r\n");
     tmp.concat("Content-Length:");
     tmp.concat(httpRequest.length);
+    Serial.println(httpRequest.length);
+    Serial.println("from makeHeader");
     tmp.concat("\r\n\r\n");
-    if(httpRequest.content == HTTP_JSON){
+    if(httpRequest.content == HTTP_JSON) {
         tmp.concat(httpRequest.body);
+        tmp.concat("\r\n\r\n");
     }
+    
 
     return tmp;
 }

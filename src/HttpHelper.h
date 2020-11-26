@@ -6,6 +6,7 @@ class HttpHelper
   String path;
   String host;
   String body;
+  uint8_t * octetBody;
   String content;
   String key;
   String length;
@@ -44,7 +45,8 @@ public:
     void setPath(String path);
     void setHost(String host);
     void setBody(String faceId, String personId, String personGroupId);
-    void setContentLength(int length);
+    void setBody(uint8_t * body);    
+    void setContentLength(uint32_t length);
     void setContent(String content);
     void setKey(String key);
     void setResponeStatus(int status);
