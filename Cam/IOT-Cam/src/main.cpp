@@ -6,15 +6,13 @@
 
 #define CAMERA_MODEL_AI_THINKER // Has PSRAM
 
-#define ssid "nhydrkum"
-#define pass "tjt5y3p6"
-#define host "192.168.0.17"
+#define ssid "TP-LINK_2.4GHz"
+#define pass "****"
+#define host "192.168.0.102"
 #define port 2555
 #define wifi_reconnects 10
 
 #include "camera_pins.h"
-const char* ssid1 = "nhydrkum";
-const char* password1 = "tjt5y3p6";
 
 void captureImage();
 bool connectWiFi();
@@ -174,8 +172,7 @@ void captureImage(){
 bool connectWiFi(){  
   Serial.println("WiFi connecting");  
   int failed = 0;
-  WiFi.begin(ssid1,password1);
-  while(WiFi.status() != WL_CONNECTED){
+  while(WiFi.begin(ssid)!=WL_CONNECTED){
     delay(500);
     failed++;
     if(failed >= wifi_reconnects){
