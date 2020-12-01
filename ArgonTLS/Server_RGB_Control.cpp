@@ -77,8 +77,8 @@ void rgbControl(int color){
 
 void faceNotRecogged(){
   // Blink red LED a few times
-  int blinkytimes = 2
-  for (int i = 0; i < blinkytimes; i++){
+  int blinkytimes = 2;
+  for(int i = 0; i < blinkytimes; i++){
     rgbControl(1);
     delay(100);
     rgbControl(0);
