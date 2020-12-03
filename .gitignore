@@ -6,3 +6,4 @@ Cam/IOT-Cam/.pio/build/esp32cam/firmware.elf
 *.a
 *.checksum
 *.json
+ArgonTLS/codes.h

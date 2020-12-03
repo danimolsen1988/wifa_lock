@@ -1,5 +1,5 @@
 #include "TlsClientHandler.h"
-#define KEY "***"
+
 
 TlsClientHandler::TlsClientHandler(/* args */)
 {
@@ -17,87 +17,93 @@ void TlsClientHandler::setup() {
 }
 
 
-char *TlsClientHandler::Detect(uint8_t * img, uint32_t length) {
-
-    http.setPath("/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&recognitionModel=recognition_03&returnRecognitionModel=false&detectionModel=detection_02");
-    http.setHost("iot-facial-compare-test.cognitiveservices.azure.com");
+int TlsClientHandler::Detect(uint8_t * img, uint32_t length) {
+    
+    memset(buff, 0, sizeof(buff));
+    http.setPath(DETECT_PATH);
+    http.setHost(HOST);
     http.setKey(KEY);
     http.setContent(http.HTTP_OCTET);
-    Serial.println(length);
     http.setBody(img);
     http.setContentLength(length); //set to the right size
-            // setup Root CA pem. have to be done before every connect!
+            // setup Root CA pem. have to be done before every connect! 
     client.init(letencryptCaPem, sizeof(letencryptCaPem));
     //connect to client on dis, port
+#if DEBUG_AZURE == 1
     Serial.println(http.makeDetect());
+#endif
     client.connect(this->URL, 443);
-
-    // check server certificate. if verify failed, TLS connection is alive.
-    if (!client.verify()) {
-      Serial.println("TLS connection is alive\r\n");
-    }
 
     // Send header to azure.
     int len = sprintf((char *)buff, http.makeDetect());
     client.write(buff, len );
-
-    client.write(img,length);
-
+    client.write(img,length);;
     // GET HTTPS response.
     memset(buff, 0, sizeof(buff));
     while(1) {
-        // read renponse.
-        memset(buff, 0, sizeof(buff));
+
+        // mabye check length and set buffer after this.
         int ret = client.read(buff, sizeof(buff) - 1);
         if (ret == MBEDTLS_ERR_SSL_WANT_READ) {
             delay(100);
         } else if (ret <= 0) {
             break;
         } else {
+#if DEBUG_AZURE == 1
             Serial.println((char *)buff);
+#endif
         }
     }
-    return nullptr;
-
+    http.setResponse((char*) buff,true);
+    int status;
+    if((status = http.getStatus()) != 200) {
+        return status;
+    }
+    return this->Verify(http.getFaceId());
 }
 
-char * TlsClientHandler::Verify() {
-    http.setPath("/face/v1.0/verify");
-    http.setHost("iot-facial-compare-test.cognitiveservices.azure.com");
+int TlsClientHandler::Verify(String id) {
+    if(id.equals("")) {
+        return false;
+    }
+    http.setPath(VERIFY_PATH);
+    http.setHost(HOST);
     http.setKey(KEY);
     http.setContent(http.HTTP_JSON);
-    http.setBody("c0e34e38-b3ce-4678-b4ae-b89f6071afa4","bb55d87d-9898-438f-b4bb-2259fc30c6be","1");
-            // setup Root CA pem. have to be done before every connect!
+    http.setBody(id,this->NIKOLAJ,this->PERSONGROUP);
+            // setup Root CA pem. have to be done before every connect! 
     client.init(letencryptCaPem, sizeof(letencryptCaPem));
     //connect to client on dis, port
+#if DEBUG_AZURE == 1
     Serial.println(http.getHost());
     Serial.println(http.makeVerify());
+#endif
     client.connect(this->URL, 443);
-
-    // check server certificate. if verify failed, TLS connection is alive.
-    if (!client.verify()) {
-      Serial.println("TLS connection is alive\r\n");
-    }
 
     // Send header to azure.
     int len = sprintf((char *)buff, http.makeVerify());
     client.write(buff, len );
-    //make loop that
+    //make loop that 
 
     // GET HTTPS response.
     memset(buff, 0, sizeof(buff));
     while(1) {
-        // read renponse.
-        memset(buff, 0, sizeof(buff));
+        // mabye check length and set buffer after this.
         int ret = client.read(buff, sizeof(buff) - 1);
         if (ret == MBEDTLS_ERR_SSL_WANT_READ) {
             delay(100);
         } else if (ret <= 0) {
             break;
         } else {
+#if DEBUG_AZURE == 1
             Serial.println((char *)buff);
+#endif
         }
     }
-    return nullptr;
+    http.setResponse((char*) buff,false);
 
+   if(http.getIsIdentical()) {
+       return true;
+   }
+   return false;
 }

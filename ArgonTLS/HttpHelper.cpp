@@ -65,9 +65,24 @@ const char * HttpHelper::makeVerify() {
    
     return  this->makeHeader().c_str();
 }
+int HttpHelper::getStatus() {
+    return httpResponse.status;
+}
 
 String HttpHelper::getBodyLength() {
-        return String(httpRequest.body.length());  
+    return String(httpRequest.body.length());  
+}
+
+String HttpHelper::getFaceId(){
+    return httpResponse.faceId;
+}
+
+bool HttpHelper::getIsIdentical(){
+    return httpResponse.isIdentical;
+}
+
+double HttpHelper::getConfidence(){
+    return httpResponse.confidence;
 }
 
 String HttpHelper::makeHeader() {
@@ -88,14 +103,53 @@ String HttpHelper::makeHeader() {
     tmp.concat("\r\n");
     tmp.concat("Content-Length:");
     tmp.concat(httpRequest.length);
-    Serial.println(httpRequest.length);
-    Serial.println("from makeHeader");
     tmp.concat("\r\n\r\n");
     if(httpRequest.content == HTTP_JSON) {
         tmp.concat(httpRequest.body);
         tmp.concat("\r\n\r\n");
     }
-    
-
     return tmp;
+}
+
+void HttpHelper::setResponse(char * respone, bool detect) { 
+    httpResponse.confidence = 0;
+    httpResponse.faceId = "";
+    httpResponse.isIdentical = false;
+    
+    std::string responeString(respone);
+
+    //get http status as int
+    httpResponse.status = atoi(responeString.substr(HTTP_PLACEMENT,HTTP_PLACEMENT+3).c_str()); 
+    //get body
+    httpResponse.body = responeString.substr((responeString.find("\r\n\r\n")+4));
+
+    JSONValue outerObj = JSONValue::parseCopy(httpResponse.body.c_str());
+    JSONArrayIterator iter;
+    JSONObjectIterator iterObj;
+    if(detect) {
+        iter = JSONArrayIterator(outerObj);
+        iter.next();    // unpack array
+        iterObj = JSONObjectIterator(iter.value());
+    } else {
+         iterObj  = JSONObjectIterator(outerObj);
+    }
+    while(iterObj.next()) {   // unpack objects
+        if(iterObj.name() == "faceId") {
+            //blabla
+            httpResponse.faceId = iterObj.value().toString().data();
+            
+        } else if (iterObj.name() == "isIdentical") {
+            httpResponse.isIdentical = iterObj.value().toBool();
+
+        } else if (iterObj.name() == "confidence"){
+            httpResponse.confidence = iterObj.value().toDouble();
+        } else {
+            //error
+        }
+        
+    }
+
+    Serial.println(httpResponse.faceId);
+    Serial.println(httpResponse.isIdentical);
+    Serial.println(httpResponse.confidence);
 }

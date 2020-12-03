@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "debug.h"
 class HttpHelper
 {
     typedef struct
@@ -20,7 +21,10 @@ class HttpHelper
 typedef struct
 {
   int status;
-  String body;
+  std::string body;
+  String faceId;
+  bool isIdentical;
+  double confidence;
 } http_response_t;
 
 
@@ -30,6 +34,7 @@ private:
     const char* HTTP_METHOD_PUT     = "PUT";
     const char* HTTP_METHOD_DELETE  = "DELETE";
     const char* HTTP_METHOD_PATCH   = "PATCH";
+    const int HTTP_PLACEMENT = 9; 
 
     int length = 0;
     http_request_t httpRequest;
@@ -42,6 +47,7 @@ public:
 
     HttpHelper(/* args */);
     ~HttpHelper();
+    // setters
     void setPath(String path);
     void setHost(String host);
     void setBody(String faceId, String personId, String personGroupId);
@@ -51,10 +57,19 @@ public:
     void setKey(String key);
     void setResponeStatus(int status);
     void setResponeBody(String body);
+    //getters
     const char * getHost();
+    String getFaceId();
+    bool getIsIdentical();
+    double getConfidence();
+    int getStatus();
 
+    // response methods
+    void setResponse(char * respone,bool detect);
+
+    // shoudln't return const char..
     const char* makeDetect();
-
     const char * makeVerify();
+    
 };
 
