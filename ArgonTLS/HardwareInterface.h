@@ -3,7 +3,7 @@
 class HardwareInterface
 {
 private:
-    Servo myservo;
+    Servo myServo;
     int servopin = D2;
     int redPin = D3;
     int greenPin = D4;

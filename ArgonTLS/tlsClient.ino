@@ -10,6 +10,7 @@
 #include "debug.h"
 #include "HardwareInterface.h"
 
+SYSTEM_MODE(MANUAL);
 
 TlsClientHandler client;
 TCPServer server = TCPServer(2555);
@@ -19,11 +20,19 @@ uint8_t * img;
 uint32_t totalSize = 0;
 uint32_t buffersize = 0;
 std::vector<uint8_t> imgVector;
+SystemSleepConfiguration sleepcfg;
 
 bool camLoop();
 
 void setup() {
-    delay(2000);
+    WiFi.on();
+    WiFi.connect();
+    while(WiFi.connecting());
+    delay(2000);    // was here--------------------------------
+    sleepcfg.mode(SystemSleepMode::ULTRA_LOW_POWER)
+    .duration(600000UL)
+    .network(NETWORK_INTERFACE_WIFI_STA, SystemSleepNetworkFlag::NONE);
+    
 #if DEBUG_AZURE == 1
     Serial.begin(115200);
     Serial.println(Time.timeStr());
@@ -37,22 +46,23 @@ void setup() {
 
 void loop() {
     // connect HTTPS server.
-    
     if(camLoop()){
         if(client.Detect(&imgVector[0],imgVector.size())) {
             Serial.println("client detected!");
             hw.openLock(true);
             hw.rgbControl(2);
             delay(5000);
-            hw.rgbControl(1);
+            hw.rgbControl(0);
             hw.openLock(false);
+            delay(2000);
         }  else {
             hw.faceNotRecogged();
+            delay(2000);
         }
     }
-    delay(1000);
-
-
+#if DEBUG_AZURE == 0
+    System.sleep(sleepcfg);
+#endif
 }
 
 bool camLoop() {
@@ -73,7 +83,6 @@ bool camLoop() {
                 delete(img); 
            }
        }
-
         return true;
    }
    return false;

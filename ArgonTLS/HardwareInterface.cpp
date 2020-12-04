@@ -9,7 +9,7 @@ HardwareInterface::~HardwareInterface()
 }
 
 void HardwareInterface::setup() {
-  myservo.attach(servopin);
+  myServo.attach(servopin);
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
@@ -21,14 +21,19 @@ void HardwareInterface::openLock(int command) {
   {
     //close
     Serial.println("Closing the lock");
-    myservo.write(0);
+    myServo.write(90);
   }
   else if (command == 1)
   {
     //open
     Serial.println("Opening the lock");
-    myservo.write(90);
+    myServo.write(0);
     //Implement nonblocking wait
+  }
+  else {
+    //close
+    Serial.println("Closing the lock");
+    myServo.write(90);
   }
 }
 
@@ -63,13 +68,15 @@ void HardwareInterface::rgbControl(int color) {
   }
 }
 
-void HardwareInterface::faceNotRecogged() {
-      int blinkytimes = 2;
-  for(int i = 0; i < blinkytimes; i++){
+void HardwareInterface::faceNotRecogged(){
+  // Blink red LED a few times
+  int blinkytimes = 2;
+  for (int i = 0; i < blinkytimes; i++){
     rgbControl(1);
-    delay(2000);
+    myServo.write(90);
+    delay(500);
     rgbControl(0);
-    delay(2000);
+    myServo.write(90);
+    delay(500);
   }
-
 }

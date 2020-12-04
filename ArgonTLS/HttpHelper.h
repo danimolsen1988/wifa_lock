@@ -41,6 +41,8 @@ private:
     http_response_t httpResponse;
     String makeHeader();
     String getBodyLength();
+    void setResponeStatus(int status);
+    void setResponeBody(String body);
 public:
     const String  HTTP_JSON ="application/json";
     const String  HTTP_OCTET ="application/octet-stream";
@@ -55,8 +57,7 @@ public:
     void setContentLength(uint32_t length);
     void setContent(String content);
     void setKey(String key);
-    void setResponeStatus(int status);
-    void setResponeBody(String body);
+
     //getters
     const char * getHost();
     String getFaceId();
@@ -67,7 +68,6 @@ public:
     // response methods
     void setResponse(char * respone,bool detect);
 
-    // shoudln't return const char..
     const char* makeDetect();
     const char * makeVerify();
     
