@@ -1,1 +1,0 @@
-Sovs til låsetyring
