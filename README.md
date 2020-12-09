@@ -15,7 +15,7 @@ All the extras can be found in the "Appendix"-folder
 All the datasheets for components used in this project can be found in the "Datasheets"-folder
 
 ## Rich picture
-The rich picture is an early system overview
+The rich picture is an early system overview.
 ![GitHub Logo](/Models_and_figures/RichPicture.png)
 
 ## activity diagram
