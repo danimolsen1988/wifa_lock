@@ -22,7 +22,7 @@ The rich picture is an early system overview.
 ## activity diagram
 The activity diagram shows the activities in the system modules. It gives a quick overview of the functionality.
 
-![GitHub Logo](/Models_and_figures/activitydiagram.png)
+![GitHub Logo](/Models_and_figures/activity_diagram.png)
 
 ## state diagram
 the state diagram shows the different states the system can be in, and with events puts it in that state,
