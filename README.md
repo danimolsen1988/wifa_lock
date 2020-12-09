@@ -9,7 +9,9 @@ The participants are on the 5th semester of the Electronics engineering branch.
 - Dani Mølgaard Olsen
 
 # How to
-- The source code can be found in the folder called "SourceCode"-folder
+- The report can be found in "Report"-folder
+
+- The source code can be found in "SourceCode"-folder
 
 - Models and figures made during development, can be found in "Model_and_figures"-folder
 
