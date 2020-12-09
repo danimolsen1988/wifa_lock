@@ -15,15 +15,15 @@ All the extras can be found in the "Appendix"-folder
 All the datasheets for components used in this project can be found in the "Datasheets"-folder
 
 ## Rich picture
-The rich picture is an early system overview.,
+The rich picture is an early system overview.
 
 ![GitHub Logo](/Models_and_figures/RichPicture.png)
 
 ## activity diagram
-The activity diagram shows the activities in the system modules. It gives a quick overview of the functionality.,
+The activity diagram shows the activities in the system modules. It gives a quick overview of the functionality.
 
-![GitHub Logo](/images/aktivitetsdiagran.png)
+![GitHub Logo](/Models_and_figures/activitydiagram.png)
 
 ## state diagram
 the state diagram shows the different states the system can be in, and with events puts it in that state,
-![GitHub Logo](/images/stateDiagram.png)
+![GitHub Logo](/Models_and_figures/stateDiagram.png)
