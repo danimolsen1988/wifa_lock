@@ -30,3 +30,7 @@ The rich picture is an early system overview.
 ## Prototype
 ![GitHub Logo](/Images/mainModule_prototype.jpg)
 ![GitHub Logo](/Images/camModule_prototype.jpg)
+<p align="center">
+  <img src="/Images/mainModule_prototype.jpg" width="600" height="800">
+  <img src="/Images/camModule_prototype.jpg" width="800" height="600">
+</p>
