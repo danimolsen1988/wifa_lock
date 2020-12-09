@@ -3,7 +3,7 @@ The wifa_lock is a IoT device capable of opening a lock, using facial recognitio
 
 ## Rich picture
 The rich picture is a early system overview
-![GitHub Logo](/images/RichPicture-IOT.png)
+![GitHub Logo](/Models_and_figures/RichPicture.png)
 
 ## activity diagram
 the activity diagram shows the activities in different system modules,
