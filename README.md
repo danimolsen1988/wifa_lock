@@ -28,5 +28,5 @@ The rich picture is an early system overview.
 ![GitHub Logo](/Models_and_figures/RichPicture.png)
 
 ## Prototype
-![GitHub Logo](/Images/mainModule_protoype.jpg)
+![GitHub Logo](/Images/mainModule_prototype.jpg)
 ![GitHub Logo](/Images/camModule_prototype.jpg)
