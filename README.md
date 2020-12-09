@@ -26,3 +26,7 @@ To get started - see the verification section for prerequisites!
 ## Rich picture
 The rich picture is an early system overview.  
 ![GitHub Logo](/Models_and_figures/RichPicture.png)
+
+## Prototype
+![GitHub Logo](/Images/mainModule_protoype.jpg)
+![GitHub Logo](/Images/camModule_prototype.jpg)
