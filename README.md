@@ -32,7 +32,9 @@ The rich picture is an early system overview.
 <p align="center">  
   <img src="/Images/mainModule_prototype.jpg" width="600" height="800">
 </p>
+
 ### Camera module
+
 <p align="center">  
   <img src="/Images/camModule_prototype.jpg" width="800" height="600">
 </p>
