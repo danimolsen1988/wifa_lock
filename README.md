@@ -3,6 +3,7 @@ The wifa_lock is an IoT device capable of opening a lock, using facial recogniti
 The development of this device has been a part of a course at Aarhus University.
 The participants are on the 5th semester of the Electronics engineering branch.
 
+
 # Contributors
 - Jakob Aaboe Vestergaard
 - Nikolaj Just Morsing
